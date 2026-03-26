@@ -25,6 +25,7 @@ app.post('/api/orders', async (req, res) => {
     try {
         const donHangMoi = new Order(req.body);
         const donHangDaLuu = await donHangMoi.save(); // Lệnh lưu thẳng vào ổ cứng MongoDB
+        const donHangDaLuu = await donHangMoi.save(); // Lệnh lưu thẳng vào ổ cứng!
         
         console.log("🔔 Đơn hàng đã lưu vào DB:", donHangDaLuu);
         res.status(201).json({
@@ -41,7 +42,6 @@ app.get('/api/orders', async (req, res) => {
     const danhSach = await Order.find(); // Lệnh móc dữ liệu từ DB ra
     res.json(danhSach);
 });
-
 app.get('/api/orders/:id', async (req, res) => {
     try {
         const order = await Order.findById(req.params.id);
@@ -74,7 +74,6 @@ app.get('/', (req, res) => {
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', service: 'order-service' });
 });
-
 app.listen(3002, () => {
     console.log(`✅ Order Service đang chạy tại cổng 3002`);
 });

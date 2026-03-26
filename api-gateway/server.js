@@ -22,12 +22,6 @@ app.use('/api/orders', createProxyMiddleware({
     changeOrigin: true 
 }));
 
-// 3. Định tuyến Dịch vụ Thanh toán
-app.use('/api/payments', createProxyMiddleware({ 
-    target: 'http://payment-service:3003',
-    changeOrigin: true 
-}));
-
 // Khởi động Gateway
 app.listen(port, () => {
     console.log(`🚀 API Gateway đang chạy tại: http://localhost:${port}`);
