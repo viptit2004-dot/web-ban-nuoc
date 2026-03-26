@@ -3,13 +3,13 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-// Connect MongoDB dùng chung order-db
 mongoose.connect('mongodb://order-db:27017/revo_order_db')
-    .then(() => console.log('📦 Payment Service đã kết nối MongoDB'))
-    .catch(err => console.error('❌ Payment Service kết nối MongoDB lỗi:', err));
+    .then(() => console.log('Payment Service da ket noi MongoDB'))
+    .catch((err) => console.error('Loi ket noi MongoDB cua Payment Service:', err));
 
 const Payment = mongoose.model('Payment', new mongoose.Schema({
     orderId: String,
@@ -20,9 +20,8 @@ const Payment = mongoose.model('Payment', new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 }));
 
-// Health check
 app.get('/', (req, res) => {
-    res.send('✅ Payment Service đang chạy');
+    res.send('Payment Service đang chạy');
 });
 
 app.get('/health', (req, res) => {
@@ -34,12 +33,11 @@ app.get('/api/payments', async (req, res) => {
     res.json(list);
 });
 
-// Giả lập thanh toán
 app.post('/api/payments', async (req, res) => {
     const { orderId, amount, method } = req.body;
 
     if (!orderId || !amount || !method) {
-        return res.status(400).json({ error: 'orderId, amount và method là bắt buộc' });
+        return res.status(400).json({ error: 'orderId, amount và method là bắt buộc.' });
     }
 
     const transactionId = `PAY-${Date.now()}`;
@@ -47,7 +45,7 @@ app.post('/api/payments', async (req, res) => {
     const savedPayment = await payment.save();
 
     res.status(201).json({
-        message: 'Thanh toán thành công',
+        message: 'Thanh toán thành công.',
         orderId,
         amount,
         method,
@@ -57,7 +55,6 @@ app.post('/api/payments', async (req, res) => {
     });
 });
 
-const port = 3003;
-app.listen(port, () => {
-    console.log(`✅ Payment Service đang chạy tại cổng ${port}`);
+app.listen(3003, () => {
+    console.log('Payment Service dang chay tai cong 3003');
 });

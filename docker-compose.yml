@@ -1,44 +1,37 @@
 services:
-  # 1. Máy chủ Cơ sở dữ liệu MongoDB cho Order Service
-  order-db:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
-  # 2. Cơ sở dữ liệu cho Product Service
+  # 1. Máy chủ Cơ sở dữ liệu MongoDB cho Product Service
   product-db:
     image: mongo:latest
     ports:
       - "27018:27017"
 
-  # 3. Dịch vụ Sản phẩm
-  # 2. Dịch vụ Sản phẩm
+  # 2. Máy chủ Cơ sở dữ liệu MongoDB cho Order Service
+  order-db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+
+  # 2. Dịch vụ Sản phẩm (Chứa giao diện Web)
   product-service:
     build: ./web-ban-nuoc
     ports:
       - "3001:3001"
-    depends_on:
-      - product-db
 
-  # 4. Dịch vụ Đặt hàng (Khai báo thêm là nó phụ thuộc vào order-db)
-
-
-  # 3. Dịch vụ Đặt hàng (Khai báo thêm là nó phụ thuộc vào order-db)
+  # 3. Dịch vụ Đặt hàng (Có kết nối Database)
   order-service:
     build: ./order-service
     ports:
       - "3002:3002"
     depends_on:
       - order-db
-  # 4. Dịch vụ Thanh toán
+
+  # 4. DỊCH VỤ THANH TOÁN (MỚI BỔ SUNG)
   payment-service:
     build: ./payment-service
     ports:
       - "3003:3003"
-    depends_on:
-      - order-db
 
   # 5. API Gateway (Lễ tân)
-  # 4. API Gateway (Lễ tân)
   api-gateway:
     build: ./api-gateway
     ports:
@@ -47,4 +40,3 @@ services:
       - product-service
       - order-service
       - payment-service
-      - order-service
